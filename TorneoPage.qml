@@ -47,10 +47,15 @@ TorneoPageForm {
             anchors.horizontalCenter: rHead.horizontalCenters
             spacing: 10
             TransparentButton {
+                id: backButton
                 source: "qrc:/images/white_arrow.png"
                 height: 30
                 width: 30
                 anchors.verticalCenter: tNameLabel.verticalCenter
+                onClicked: {
+                    stackPrincipal.pop()
+                    stackPrincipal.push("qrc:/PaginaBienvenida.qml")
+                }
             }
 
             Label {

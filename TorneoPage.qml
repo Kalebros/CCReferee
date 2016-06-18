@@ -46,7 +46,7 @@ TorneoPageForm {
             anchors.verticalCenter: rHead.verticalCenter
             anchors.horizontalCenter: rHead.horizontalCenters
             spacing: 10
-            Image {
+            TransparentButton {
                 source: "qrc:/images/white_arrow.png"
                 height: 30
                 width: 30

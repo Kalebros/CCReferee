@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>PaginaBienvenida.qml</file>
+        <file>PaginaBienvenidaForm.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>NuevoTorneoPage.qml</file>
+        <file>NuevoTorneoPageForm.ui.qml</file>
+        <file>PaginaCarga.qml</file>
+        <file>PaginaCargaForm.ui.qml</file>
+        <file>TorneoDelegate.qml</file>
+        <file>TorneoPage.qml</file>
+        <file>TorneoPageForm.ui.qml</file>
+        <file>JugadoresPage.qml</file>
+        <file>JugadoresPageForm.ui.qml</file>
+        <file>JugadorDelegate.qml</file>
+        <file>BarraBotonesTorneo.qml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>players.png</file>
+        <file>players_blue.png</file>
+        <file>players_orange.png</file>
+        <file>white_arrow.png</file>
+    </qresource>
+</RCC>

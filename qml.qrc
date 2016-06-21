@@ -16,6 +16,9 @@
         <file>JugadorDelegate.qml</file>
         <file>BarraBotonesTorneo.qml</file>
         <file>TransparentButton.qml</file>
+        <file>InfoTorneo.qml</file>
+        <file>InfoTorneoForm.ui.qml</file>
+        <file>torneoCreacion.js</file>
     </qresource>
     <qresource prefix="/images">
         <file>players.png</file>

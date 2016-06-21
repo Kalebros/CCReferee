@@ -24,6 +24,9 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+import Bardo.CCTorneo.TorneoData 1.0
+import "qrc:/torneoCreacion.js" as ScriptCreacion
+
 Component {
     id: torneoDelegate
     Item {
@@ -34,8 +37,13 @@ Component {
         MouseArea {
             anchors.fill: parent
             onClicked:{
+                var torneoData=Qt.createQmlObject('import Bardo.CCTorneo.TorneoData 1.0; TorneoData {nombre: ""; tipo: "Catan"}',
+                                                  root,"infoTorneo1")
+                torneoData.nombre=lNombre.text
+                torneoData.tipo=lTipo.text
+                console.log(torneoData.nombre+", "+torneoData.tipo)
                 stackPrincipal.pop()
-                stackPrincipal.push("qrc:/TorneoPage.qml",{ "infoTorneo.nombre": nombre, "infoTorneo.tipo": tipo});
+                stackPrincipal.push("qrc:/TorneoPage.qml",{ "infoTorneo": torneoData});
             }
         }
 

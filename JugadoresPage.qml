@@ -29,7 +29,6 @@ import Bardo.CCTorneo.TorneoData 1.0
 JugadoresPageForm {
 
     property string tipo
-
     vistaJugadores.topMargin: 40
 
     vistaJugadores.model: ListModel {

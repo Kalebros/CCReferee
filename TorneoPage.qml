@@ -27,14 +27,12 @@ import QtQuick.Controls.Material 2.0
 import Bardo.CCTorneo.TorneoData 1.0
 
 TorneoPageForm {
+    id: tPage
+    property TorneoData infoTorneo
 
-    property alias infoTorneo: infoTorneo
-    property string rutaIcono: infoTorneo.tipo=="Catan" ? "qrc:/images/players_orange.png" : "qrc:/images/players_blue.png"
+    property var listaNombres: ["Información del torneo","Participantes"]
 
     anchors.fill: parent
-    TorneoData {
-        id: infoTorneo
-    }
 
     header: Rectangle {
         id: rHead
@@ -106,14 +104,26 @@ TorneoPageForm {
         anchors.fill: parent
         currentIndex: barraBotones.currentIndex
 
+        InfoTorneo {
+            id: infoTorneoPage
+            infoTorneo: tPage.infoTorneo
+
+            Binding {
+                target: tPage
+                property: infoTorneo
+                value: infoTorneoPage.infoTorneo
+            }
+        }
+
         JugadoresPage {
             id: jugadoresPage
             tipo: infoTorneo.tipo
         }
-        Page {
-            id: pruebaPage
-        }
 
+    }
+
+    Component.onCompleted: {
+        console.log("INFO TORNEO: "+infoTorneo.nombre)
     }
 
 }

@@ -24,17 +24,19 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+import "qrc:/torneoCreacion.js" as ScriptTorneo
+
 NuevoTorneoPageForm {
-    property string tipoTorneo: "Carcasonne"
+    property string tipoTorneo: "Carcassonne"
     anchors.fill: parent
 
     torneoField.validator: RegExpValidator{ regExp: /.*\S.*/ }
     Component.onCompleted: {
         //Actualizar el color dependiendo del tipo de torneo
-        if(tipoTorneo=="Carcasonne") {
+        if(tipoTorneo=="Carcassonne") {
             torneoField.color="steelblue"
             torneoLabel.color="steelblue"
-            torneoLabel.text="Carcasonne"
+            torneoLabel.text="Carcassonne"
         }
         if(tipoTorneo=="Catan") {
             torneoField.color="orange"
@@ -56,8 +58,12 @@ NuevoTorneoPageForm {
 
     readyButton.onClicked: {
         if(torneoField.text) {
+            var torneoData=Qt.createQmlObject('import Bardo.CCTorneo.TorneoData 1.0; TorneoData {nombre: ""; tipo: "Catan"}',
+                                              root,"infoTorneo1")
+            torneoData.nombre=torneoField.text
+            torneoData.tipo=tipoTorneo
             stackPrincipal.pop()
-            stackPrincipal.push("qrc:/TorneoPage.qml",{"infoTorneo.nombre": torneoField.text, "infoTorneo.tipo":tipoTorneo})
+            stackPrincipal.push("qrc:/TorneoPage.qml",{"infoTorneo": torneoData})
         }
     }
 }

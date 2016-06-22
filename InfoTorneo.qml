@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
 import Bardo.CCTorneo.TorneoData 1.0
 
@@ -7,7 +8,9 @@ InfoTorneoForm {
 
     property TorneoData infoTorneo
 
+
     nombreField.text: infoTorneo.nombre
+    tipo: infoTorneo.tipo
 
     tipoComboBox.model: ListModel {
 
@@ -30,7 +33,4 @@ InfoTorneoForm {
         infoTorneo.nombre=nombreField.text
     }
 
-    Component.onCompleted: {
-        console.log("INFO TORNEO: "+infoTorneo.tipo)
-    }
 }

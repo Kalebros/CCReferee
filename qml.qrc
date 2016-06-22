@@ -21,9 +21,10 @@
         <file>torneoCreacion.js</file>
     </qresource>
     <qresource prefix="/images">
-        <file>players.png</file>
-        <file>players_blue.png</file>
-        <file>players_orange.png</file>
         <file>white_arrow.png</file>
+        <file>ic_group_48px.svg</file>
+        <file>ic_groupWhite_48px.svg</file>
+        <file>ic_description_48px.svg</file>
+        <file>ic_descriptionWhite_48px.svg</file>
     </qresource>
 </RCC>

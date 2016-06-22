@@ -36,8 +36,8 @@ TorneoPageForm {
 
     header: Rectangle {
         id: rHead
-        color: infoTorneo.tipo=="Catan" ? "orange" : "steelblue"
-        height: 50
+        color: infoTorneo.tipo=="Catan" ? "orangered"  : "steelblue"
+        height: 70
         Row {
             x:10
             y:0
@@ -71,17 +71,29 @@ TorneoPageForm {
         TabBar {
             id: barraBotones
             anchors.top: rHead.bottom
-            Material.accent: infoTorneo.tipo=="Catan" ? Material.Indigo : Material.Amber
+            Material.accent: infoTorneo.tipo=="Catan" ? Material.Amber : Material.Lime
             width: parent.width
-            height: 40
+            height: 20
             currentIndex: torneoSwipe.currentIndex
+            background: Rectangle {
+                x:0
+                y:0
+                width: barraBotones.availableWidth
+                height:botonA.height
+                color: infoTorneo.tipo=="Catan" ? "orangered" : "steelblue"
+            }
+
             TabButton {
                 id: botonA
                 background: Rectangle {
-                    color: botonA.checked ? "white" : rHead.color
+                    color: rHead.color
+                    border.color: "transparent"
                     Image {
-                        id: iconTab
-                        source: botonA.checked ?  rutaIcono : "qrc:/images/players.png"
+                        id: iconTabA
+                        height: 30
+                        width: 30
+                        source: botonA.checked ? "qrc:/images/ic_descriptionWhite_48px.svg" : "qrc:/images/ic_description_48px.svg"
+                        opacity:  botonA.checked ? 1 : 0.7
                         smooth: true
                         antialiasing: true
                         anchors.centerIn: parent
@@ -91,11 +103,41 @@ TorneoPageForm {
             TabButton {
                 id: botonB
                 Material.accent: "white"
-                text: "SegundoBoton"
                 background: Rectangle {
-                    color: botonB.checked ? "white" : rHead.color
+                    color: rHead.color
+                    border.color: "transparent"
+                    Image {
+                        id: iconTabB
+                        height: 30
+                        width: 30
+                        source: botonB.checked ? "qrc:/images/ic_groupWhite_48px.svg" : "qrc:/images/ic_group_48px.svg"
+                        opacity:  botonB.checked ? 1 : 0.7
+                        smooth: true
+                        antialiasing: true
+                        anchors.centerIn: parent
+                    }
                 }
             }
+            TabButton {
+                id: botonC
+                Material.accent: "white"
+                text: "SegundoBoton"
+                background: Rectangle {
+                    color: rHead.color
+                    border.color: "transparent"
+                }
+            }
+
+            TabButton {
+                id: botonD
+                Material.accent: "white"
+                text: "SegundoBoton"
+                background: Rectangle {
+                    color: rHead.color
+                    border.color: "transparent"
+                }
+            }
+
         }
     }
 

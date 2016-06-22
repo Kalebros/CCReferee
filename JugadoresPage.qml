@@ -23,6 +23,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
 import Bardo.CCTorneo.TorneoData 1.0
 
@@ -149,6 +150,7 @@ JugadoresPageForm {
     }
 
     vistaJugadores.delegate: CheckDelegate {
+        Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
         width: vistaJugadores.width
         text: nombre
     }
@@ -161,13 +163,13 @@ JugadoresPageForm {
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Nombre"
-                color: tipo=="Catan" ? "orange" : "steelblue"
+                color: tipo=="Catan" ? "orangered" : "steelblue"
             }
             Label {
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
-                color: tipo=="Catan" ? "orange" : "steelblue"
+                color: tipo=="Catan" ? "orangered" : "steelblue"
                 text: "Checking"
         }
 
@@ -177,7 +179,7 @@ JugadoresPageForm {
             width: parent.width
             height: 1
             color: "transparent"
-            border.color: tipo=="Catan" ? "orange" : "steelblue"
+            border.color: tipo=="Catan" ? "orangered" : "steelblue"
         }
     }
     barraBotones.tipo: tipo

@@ -154,34 +154,34 @@ JugadoresPageForm {
         width: vistaJugadores.width
         text: nombre
     }
-    vistaJugadores.header: Rectangle {
-        width: parent.width
-        height: 40
-        color: "white"
-            Label {
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Nombre"
-                color: tipo=="Catan" ? "orangered" : "steelblue"
-            }
-            Label {
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                color: tipo=="Catan" ? "orangered" : "steelblue"
-                text: "Checking"
-        }
+//    vistaJugadores.header: Rectangle {
+//        width: parent.width
+//        height: 40
+//        color: "white"
+//            Label {
+//                anchors.left: parent.left
+//                anchors.leftMargin: 10
+//                anchors.verticalCenter: parent.verticalCenter
+//                text: "Nombre"
+//                color: tipo=="Catan" ? "orangered" : "steelblue"
+//            }
+//            Label {
+//                anchors.right: parent.right
+//                anchors.rightMargin: 10
+//                anchors.verticalCenter: parent.verticalCenter
+//                color: tipo=="Catan" ? "orangered" : "steelblue"
+//                text: "Checking"
+//        }
 
-        Rectangle {
+//        Rectangle {
 
-            anchors.bottom: parent.bottom
-            width: parent.width
-            height: 1
-            color: "transparent"
-            border.color: tipo=="Catan" ? "orangered" : "steelblue"
-        }
-    }
+//            anchors.bottom: parent.bottom
+//            width: parent.width
+//            height: 1
+//            color: "transparent"
+//            border.color: tipo=="Catan" ? "orangered" : "steelblue"
+//        }
+//    }
     barraBotones.tipo: tipo
 
 }

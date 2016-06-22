@@ -43,12 +43,12 @@ TorneoPageForm {
             y:0
             anchors.verticalCenter: rHead.verticalCenter
             anchors.horizontalCenter: rHead.horizontalCenters
-            spacing: 10
+            spacing: 15
             TransparentButton {
                 id: backButton
                 source: "qrc:/images/white_arrow.png"
-                height: 30
-                width: 30
+                height: 25
+                width: 25
                 anchors.verticalCenter: tNameLabel.verticalCenter
                 onClicked: {
                     stackPrincipal.pop()
@@ -58,13 +58,12 @@ TorneoPageForm {
 
             Label {
                 id: tNameLabel
-                text: infoTorneo.nombre
+                text: listaNombres[torneoSwipe.currentIndex]
                 color: "white"
                 width: (rHead.width / 5) * 4
-                font.pointSize: 20
+                font.pointSize: 15
+                font.bold: true
                 elide: Text.ElideRight
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
             }
         }
 
@@ -116,25 +115,6 @@ TorneoPageForm {
                         antialiasing: true
                         anchors.centerIn: parent
                     }
-                }
-            }
-            TabButton {
-                id: botonC
-                Material.accent: "white"
-                text: "SegundoBoton"
-                background: Rectangle {
-                    color: rHead.color
-                    border.color: "transparent"
-                }
-            }
-
-            TabButton {
-                id: botonD
-                Material.accent: "white"
-                text: "SegundoBoton"
-                background: Rectangle {
-                    color: rHead.color
-                    border.color: "transparent"
                 }
             }
 

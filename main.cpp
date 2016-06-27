@@ -23,6 +23,8 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QColor>
 
 #include "torneodata.h"
 
@@ -33,6 +35,12 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<TorneoData>("Bardo.CCTorneo.TorneoData",1,0,"TorneoData");
     QQmlApplicationEngine engine;
+
+    QQmlContext *contexto=engine.rootContext();
+    contexto->setProperty("primaryCatanColor",QColor("orange"));
+    contexto->setProperty("primaryCarcassonneColor",QColor("steelblue"));
+    contexto->setProperty("secondaryCatanColor",QColor("#FFC107")); //Material.Amber
+    contexto->setProperty("secondaryCarcasssonneColor",QColor("#CDDC39")); //Material.Lime
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();

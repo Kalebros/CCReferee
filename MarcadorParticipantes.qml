@@ -22,32 +22,30 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import QtQuick 2.7
-import QtQuick.Window 2.0
 import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.0
 import QtQuick.Controls.Material 2.0
 
+Item {
+    property string texto
+    property string numero
 
-ApplicationWindow {
-    id: root
-    visible: true
-    width: 358
-    height: 642
-
-    title: qsTr("CCReferee")
-
-    property color primaryCatan: "orangered"
-    property color secondaryCatan: "#FFC107" //Material.Amber
-    property color primaryCarca: "steelblue"
-    property color secondaryCarca: "#CDDC39" //Material.Lime
-
-
-    StackView {
-        id: stackPrincipal
-        anchors.fill: parent
-        initialItem: PaginaBienvenida {
-            id: paginaInicial
-        }
+    id: marcador
+    implicitHeight: textLabel.height + numberLabel.height + 5
+    implicitWidth: textLabel.width
+    Label {
+        id: textLabel
+        x:0
+        y:0
+        text: texto
+        font.pointSize: 15
+    }
+    Label {
+        id: numberLabel
+        anchors.horizontalCenter: marcador.horizontalCenter
+        anchors.top: textLabel.bottom
+        anchors.topMargin: 5
+        text: numero
+        font.pointSize: 20
     }
 
 }

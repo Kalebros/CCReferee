@@ -13,18 +13,21 @@ Item {
     property string tipo
 
     ColumnLayout {
-        x: 30
+        id: tipoColumn
+        anchors.right: parent.right
+        anchors.rightMargin: 30
+        anchors.left: parent.left
+        anchors.leftMargin: 30
         anchors.top: textField1.bottom
         anchors.topMargin: 23
-        anchors.horizontalCenterOffset: 5
-        anchors.horizontalCenter: parent.horizontalCenter
 
         Label {
             id: label2
             text: qsTr("Tipo de torneo")
             Layout.preferredHeight: 31
             Layout.preferredWidth: 175
-            font.pointSize: 12
+            font.pointSize: 15
+            color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
         }
 
         ComboBox {
@@ -37,12 +40,13 @@ Item {
 
     TextField {
         id: textField1
-        x: 30
-        width: 298
-        height: 40
+        height: 44
         text: qsTr("Text Field")
-        anchors.horizontalCenterOffset: 5
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 30
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+        font.pointSize: 15
         anchors.top: parent.top
         anchors.topMargin: 89
         Layout.preferredHeight: 40
@@ -50,4 +54,81 @@ Item {
         placeholderText: "Nombre del torneo"
         Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
     }
+
+    ColumnLayout {
+        id: columnParticipantes
+        x: 30
+        y: 243
+        width: 310
+        height: 86
+
+        Label {
+            id: label1
+            text: qsTr("Participantes")
+            Layout.preferredHeight: 21
+            Layout.preferredWidth: 104
+            font.pointSize: 15
+            color: infoTorneo.tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+        }
+
+        RowLayout {
+            spacing: 20
+
+            MarcadorParticipantes {
+                id: marcadorMinimo
+                numero: "8"
+                texto: "Minimo"
+            }
+
+            MarcadorParticipantes {
+                id: marcadorActuales
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                numero: "0"
+                texto: "Actuales"
+            }
+
+            MarcadorParticipantes {
+                id: marcadorChecked
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                numero: "0"
+                texto: "Checked"
+            }
+        }
+    }
+
+    ColumnLayout {
+        x: 24
+        y: 360
+        width: 298
+        height: 86
+
+        Label {
+            id: labelEstimacion
+            color: infoTorneo.tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+            text: qsTr("Estimacion de mesas")
+            font.pointSize: 15
+            Layout.preferredHeight: 21
+            Layout.preferredWidth: 176
+        }
+
+        RowLayout {
+            Layout.preferredHeight: 60
+            Layout.preferredWidth: 286
+
+            MarcadorParticipantes {
+                id: marcadorActuales1
+                texto: "Previstas"
+                numero: "0"
+            }
+
+            MarcadorParticipantes {
+                id: marcadorChecked1
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                texto: "Reales"
+                numero: "0"
+            }
+            spacing: 30
+        }
+    }
+
 }

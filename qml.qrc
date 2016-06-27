@@ -19,6 +19,9 @@
         <file>InfoTorneo.qml</file>
         <file>InfoTorneoForm.ui.qml</file>
         <file>torneoCreacion.js</file>
+        <file>MarcadorParticipantes.qml</file>
+        <file>InfoTorneoB.qml</file>
+        <file>InfoTorneoBForm.ui.qml</file>
     </qresource>
     <qresource prefix="/images">
         <file>white_arrow.png</file>

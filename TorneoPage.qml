@@ -36,8 +36,8 @@ TorneoPageForm {
 
     header: Rectangle {
         id: rHead
-        color: infoTorneo.tipo=="Catan" ? "orangered"  : "steelblue"
-        height: 70
+        color: infoTorneo.tipo=="Catan" ? root.primaryCatan  : root.primaryCarca
+        height: 50
         Row {
             x:10
             y:0
@@ -70,7 +70,7 @@ TorneoPageForm {
         TabBar {
             id: barraBotones
             anchors.top: rHead.bottom
-            Material.accent: infoTorneo.tipo=="Catan" ? Material.Amber : Material.Lime
+            Material.accent: infoTorneo.tipo=="Catan" ? root.secondaryCatan : root.secondaryCarca
             width: parent.width
             height: 20
             currentIndex: torneoSwipe.currentIndex
@@ -79,7 +79,7 @@ TorneoPageForm {
                 y:0
                 width: barraBotones.availableWidth
                 height:botonA.height
-                color: infoTorneo.tipo=="Catan" ? "orangered" : "steelblue"
+                color: infoTorneo.tipo=="Catan" ? root.primaryCatan : root.primaryCarca
             }
 
             TabButton {
@@ -141,6 +141,8 @@ TorneoPageForm {
             id: jugadoresPage
             tipo: infoTorneo.tipo
         }
+
+        ScrollBar.vertical: ScrollBar {}
 
     }
 

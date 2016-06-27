@@ -45,7 +45,8 @@ Item {
         anchors.top: textLabel.bottom
         anchors.topMargin: 5
         text: numero
-        font.pointSize: 20
+        font.pointSize: 25
+
     }
 
 }

@@ -32,6 +32,7 @@ public:
     QModelIndex parent(const QModelIndex &child) const;
 
     void updateTorneo(int id,QString nombre,QString tipo);
+    void addTorneo(TorneoData *torneo);
 
 signals:
 

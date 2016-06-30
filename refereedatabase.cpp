@@ -112,14 +112,52 @@ void RefereeDatabase::updateTorneoData(int id, QString nombre, QString tipo)
 {
     {
         QSqlQuery query(_db);
+        _db.transaction();
         query.prepare("UPDATE Torneo SET nombre=:nombre,tipo=:tipo WHERE idTorneo=:id");
         query.bindValue(":nombre",nombre);
         query.bindValue(":tipo",tipo);
         query.bindValue(":id",id);
-        qDebug() << "ID: "<<id<<" NOMBRE: "<<nombre<<" TIPO: "<<tipo;
-
-        if(!query.exec())
-            qDebug() << "ERROR EN updateTorneoData: "<<query.lastError().text();
+        if(query.exec())
+            _db.commit();
+        else {
+            _db.rollback();
+            return;
+        }
     }
-    _torneos->updateTorneo(id,nombre,tipo);
+    if(_torneos)
+        _torneos->updateTorneo(id,nombre,tipo);
+}
+
+int RefereeDatabase::addTorneo(QString nombre, QString tipo)
+{
+    int nuevaID=-1;
+    {
+        QSqlQuery query(_db);
+        _db.transaction();
+        query.prepare("INSERT INTO Torneo(nombre,tipo) "
+                      "VALUES(:nombre,:tipo)");
+        query.bindValue(":nombre",nombre);
+        query.bindValue(":tipo",tipo);
+        if(query.exec()) {
+            query.exec("SELECT last_insert_rowid()");
+            query.next();
+            nuevaID=query.value(0).toInt();
+            _db.commit();
+        }
+        else {
+            _db.rollback();
+            return nuevaID;
+        }
+    }
+
+    if(_torneos) {
+        TorneoData *nuevoTorneo=new TorneoData(this);
+        nuevoTorneo->setInternalID(nuevaID);
+        nuevoTorneo->setNombre(nombre);
+        nuevoTorneo->setTipo(tipo);
+        _torneos->addTorneo(nuevoTorneo);
+    }
+
+    return nuevaID;
+
 }

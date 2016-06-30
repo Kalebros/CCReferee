@@ -109,6 +109,13 @@ void TorneoModel::updateTorneo(int id, QString nombre, QString tipo)
     }
 }
 
+void TorneoModel::addTorneo(TorneoData *torneo)
+{
+    beginInsertRows(QModelIndex(),_listaTorneos.count(),_listaTorneos.count());
+    _listaTorneos.append(torneo);
+    endInsertRows();
+}
+
 QModelIndex TorneoModel::index(int row, int column, const QModelIndex &parent) const
 {
     return createIndex(row,column);

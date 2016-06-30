@@ -32,6 +32,7 @@ public:
     Q_INVOKABLE TorneoModel *getTorneoModel();
 
     Q_INVOKABLE void updateTorneoData(int id,QString nombre,QString tipo);
+    Q_INVOKABLE int addTorneo(QString nombre, QString tipo);
 
 signals:
 

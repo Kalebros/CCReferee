@@ -24,6 +24,8 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+import Bardo.CCTorneo.Database 1.0
+
 import "qrc:/torneoCreacion.js" as ScriptTorneo
 
 NuevoTorneoPageForm {
@@ -58,10 +60,13 @@ NuevoTorneoPageForm {
 
     readyButton.onClicked: {
         if(torneoField.text) {
+
+            var idTorneo=Database.addTorneo(torneoField.text,tipoTorneo);
             var torneoData=Qt.createQmlObject('import Bardo.CCTorneo.TorneoData 1.0; TorneoData {nombre: ""; tipo: "Catan"}',
                                               root,"infoTorneo1")
             torneoData.nombre=torneoField.text
             torneoData.tipo=tipoTorneo
+            torneoData.internalID=idTorneo
             stackPrincipal.pop()
             stackPrincipal.push("qrc:/TorneoPage.qml",{"infoTorneo": torneoData})
         }

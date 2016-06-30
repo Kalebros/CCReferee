@@ -1,9 +1,11 @@
-QT += qml quick svg
+QT += qml quick svg sql
 
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    torneodata.cpp
+    torneodata.cpp \
+    refereedatabase.cpp \
+    torneomodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -16,4 +18,6 @@ include(deployment.pri)
 DISTFILES +=
 
 HEADERS += \
-    torneodata.h
+    torneodata.h \
+    refereedatabase.h \
+    torneomodel.h

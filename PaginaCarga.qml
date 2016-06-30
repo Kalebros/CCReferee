@@ -24,95 +24,16 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+import Bardo.CCTorneo.Database 1.0
+import Bardo.CCTorneo.TorneoData 1.0
+
 PaginaCargaForm {
 
     id: paginaCarga
     anchors.fill: parent
     labelColor: "steelblue"
 
-    vistaTorneos.model: ListModel {
-
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Carcassonne"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Carcasonne"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Carcassonne"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Carcasonne"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Carcassonne"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Carcasonne"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Carcassonne"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Carcasonne"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Carcassonne"
-        }
-        ListElement {
-            nombre: "Jornadas Lúdicas Andaluzas 2016"
-            tipo: "Catan"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Carcasonne"
-        }
-        ListElement {
-            nombre: "Ficzone 2016"
-            tipo: "Catan"
-        }
-    }
+    vistaTorneos.model: modeloTorneos
 
     vistaTorneos.delegate: TorneoDelegate {}
 

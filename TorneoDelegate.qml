@@ -42,7 +42,8 @@ Component {
                                                   root,"infoTorneo1")
                 torneoData.nombre=lNombre.text
                 torneoData.tipo=lTipo.text
-                console.log(torneoData.nombre+", "+torneoData.tipo)
+                torneoData.internalID=internalID
+                console.log(torneoData.nombre+", "+torneoData.tipo+", "+torneoData.internalID)
                 stackPrincipal.pop()
                 stackPrincipal.push("qrc:/TorneoPage.qml",{ "infoTorneo": torneoData});
             }

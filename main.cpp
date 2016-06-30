@@ -27,6 +27,13 @@
 #include <QColor>
 
 #include "torneodata.h"
+#include "refereedatabase.h"
+#include "torneomodel.h"
+
+static QObject * getRefereeDatabase(QQmlEngine*, QJSEngine*)
+{
+    return RefereeDatabase::instance();
+}
 
 int main(int argc, char *argv[])
 {
@@ -34,14 +41,20 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<TorneoData>("Bardo.CCTorneo.TorneoData",1,0,"TorneoData");
+    qmlRegisterSingletonType<RefereeDatabase>("Bardo.CCTorneo.Database",1,0,"Database",getRefereeDatabase);
+
     QQmlApplicationEngine engine;
+
+    TorneoModel *modeloTorneos=RefereeDatabase::instance()->getTorneoModel();
 
     QQmlContext *contexto=engine.rootContext();
     contexto->setProperty("primaryCatanColor",QColor("orange"));
     contexto->setProperty("primaryCarcassonneColor",QColor("steelblue"));
     contexto->setProperty("secondaryCatanColor",QColor("#FFC107")); //Material.Amber
     contexto->setProperty("secondaryCarcasssonneColor",QColor("#CDDC39")); //Material.Lime
+    contexto->setContextProperty("modeloTorneos",modeloTorneos);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+
 
     return app.exec();
 }

@@ -26,12 +26,15 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 
 import Bardo.CCTorneo.TorneoData 1.0
+import Bardo.CCTorneo.Database 1.0
+
 import QtQuick.Layouts 1.0
 
 InfoTorneoForm {
     id: infoTorneoForm1
 
     property TorneoData infoTorneo
+    property bool isDataChanged: false
 
 
     nombreField.text: infoTorneo.nombre
@@ -52,13 +55,19 @@ InfoTorneoForm {
 
     tipoComboBox.onCurrentTextChanged: {
         infoTorneo.tipo=tipoComboBox.currentText
+        isDataChanged=true
     }
 
     nombreField.onTextChanged: {
         infoTorneo.nombre=nombreField.text
+        isDataChanged=true
     }
 
     ScrollBar.vertical: ScrollBar {}
     ScrollBar.horizontal: ScrollBar {}
 
+    Component.onDestruction: {
+        if(isDataChanged)
+            Database.updateTorneoData(infoTorneo.internalID,infoTorneo.nombre,infoTorneo.tipo)
+    }
 }

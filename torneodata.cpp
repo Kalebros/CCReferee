@@ -25,7 +25,9 @@
 
 TorneoData::TorneoData(QObject *parent) : QObject(parent)
 {
-
+    _nombre=QString();
+    _tipo=QString();
+    _internalID=-1;
 }
 
 void TorneoData::setNombre(QString n)
@@ -38,4 +40,10 @@ void TorneoData::setTipo(QString t)
 {
     _tipo=t;
     emit tipoChanged(_tipo);
+}
+
+void TorneoData::setInternalID(int id)
+{
+    _internalID=id;
+    emit internalIDChanged(_internalID);
 }

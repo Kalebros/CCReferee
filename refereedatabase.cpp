@@ -67,6 +67,8 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
                    "checked INTEGER NOT NULL DEFAULT 0, "
                    "FOREIGN KEY(idTorneo) REFERENCES Torneo(idTorneo)"
                    ")");
+
+        query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.0')");
     }
     _torneos=0;
 }

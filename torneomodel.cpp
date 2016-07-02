@@ -17,11 +17,13 @@ QHash<int,QByteArray> TorneoModel::roleNames() const
 
 int TorneoModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return _listaTorneos.count();
 }
 
 int TorneoModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 1;
 }
 
@@ -116,13 +118,27 @@ void TorneoModel::addTorneo(TorneoData *torneo)
     endInsertRows();
 }
 
+TorneoData *TorneoModel::getTorneo(int id)
+{
+    TorneoData *res=0;
+    foreach(TorneoData *torneo,_listaTorneos) {
+        if(torneo->internalID()==id) {
+            res=torneo;
+        }
+    }
+
+    return res;
+}
+
 QModelIndex TorneoModel::index(int row, int column, const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return createIndex(row,column);
 }
 
 QModelIndex TorneoModel::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child)
     return QModelIndex();
 }
 

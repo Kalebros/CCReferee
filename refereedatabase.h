@@ -9,6 +9,8 @@
 
 #include "torneodata.h"
 #include "torneomodel.h"
+#include "participantedata.h"
+#include "participantesmodel.h"
 
 /*!
  * @class RefereeDatabase
@@ -20,41 +22,42 @@
 class RefereeDatabase : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int valorDedicado READ getValorDedicado WRITE setValorDedicado NOTIFY valorDedicadoChange)
+
 public:
 
     static RefereeDatabase *instance();
 
-    int getValorDedicado() const
-    { return _vDedicado; }
-
     Q_INVOKABLE TorneoData *getTorneo(int id);
     Q_INVOKABLE TorneoModel *getTorneoModel();
+    Q_INVOKABLE ParticipantesModel *getParticipantesModel();
 
     Q_INVOKABLE void updateTorneoData(int id,QString nombre,QString tipo);
     Q_INVOKABLE int addTorneo(QString nombre, QString tipo);
+    Q_INVOKABLE void setCurrentTorneo(int idTorneo);
+    Q_INVOKABLE void checkParticipante(int idParticipante,bool check);
+
+    void updateParticipante(int idParticipante,ParticipanteData *data);
+
 
 signals:
 
-    void valorDedicadoChange(int v);
 
 public slots:
 
-    void setValorDedicado(int v)
-    {
-        _vDedicado=v;
-        emit valorDedicadoChange(_vDedicado);
-    }
-
 private:
-
     explicit RefereeDatabase(QObject *parent = 0);
 
     static RefereeDatabase *_instance;
+    static QString currentVersion;
+
 
     QSqlDatabase _db;
-    int _vDedicado;
+    int _currentTorneo;
     TorneoModel *_torneos;
+    ParticipantesModel *_participantes;
+
+    void updateToNextVersion();
+    QString checkDatabaseVersion() const;
 };
 
 #endif // REFEREEDATABASE_H

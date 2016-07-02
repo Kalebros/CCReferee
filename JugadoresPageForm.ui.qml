@@ -98,22 +98,12 @@ Page {
 
             ToolButton {
                 id: toolButton1
-                text: qsTr("Tool Button")
+                text: qsTr("Nuevo participante")
             }
 
             ToolButton {
                 id: toolButton2
-                text: qsTr("Tool Button")
-            }
-
-            ToolButton {
-                id: toolButton3
-                text: qsTr("Tool Button")
-            }
-
-            ToolButton {
-                id: toolButton4
-                text: qsTr("Tool Button")
+                text: qsTr("Editar participante")
             }
         }
     }

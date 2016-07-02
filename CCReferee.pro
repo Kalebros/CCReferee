@@ -5,7 +5,9 @@ CONFIG += c++11
 SOURCES += main.cpp \
     torneodata.cpp \
     refereedatabase.cpp \
-    torneomodel.cpp
+    torneomodel.cpp \
+    participantesmodel.cpp \
+    participantedata.cpp
 
 RESOURCES += qml.qrc
 
@@ -20,4 +22,6 @@ DISTFILES +=
 HEADERS += \
     torneodata.h \
     refereedatabase.h \
-    torneomodel.h
+    torneomodel.h \
+    participantesmodel.h \
+    participantedata.h

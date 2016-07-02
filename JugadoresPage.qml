@@ -26,162 +26,52 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 
 import Bardo.CCTorneo.TorneoData 1.0
+import Bardo.CCTorneo.Database 1.0
 
 JugadoresPageForm {
 
     property string tipo
     vistaJugadores.topMargin: 40
 
-    vistaJugadores.model: ListModel {
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-        ListElement {
-            nombre: "Juan Faquer"
-            checked: false
-        }
-
-        ListElement {
-            nombre: "Maria Destroyer"
-            checked: false
-        }
-    }
+    vistaJugadores.model: modeloParticipantes
 
     vistaJugadores.delegate: CheckDelegate {
         Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
         width: vistaJugadores.width
         text: nombre
+        checked: checking
+        onClicked: {
+            Database.checkParticipante(idParticipante,!checking);
+        }
     }
-//    vistaJugadores.header: Rectangle {
-//        width: parent.width
-//        height: 40
-//        color: "white"
-//            Label {
-//                anchors.left: parent.left
-//                anchors.leftMargin: 10
-//                anchors.verticalCenter: parent.verticalCenter
-//                text: "Nombre"
-//                color: tipo=="Catan" ? "orangered" : "steelblue"
-//            }
-//            Label {
-//                anchors.right: parent.right
-//                anchors.rightMargin: 10
-//                anchors.verticalCenter: parent.verticalCenter
-//                color: tipo=="Catan" ? "orangered" : "steelblue"
-//                text: "Checking"
-//        }
+    vistaJugadores.header: Rectangle {
+        width: parent.width
+        height: 40
+        color: "white"
+            Label {
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Nombre"
+                color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+            }
+            Label {
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+                text: "Checking"
+        }
 
-//        Rectangle {
+        Rectangle {
 
-//            anchors.bottom: parent.bottom
-//            width: parent.width
-//            height: 1
-//            color: "transparent"
-//            border.color: tipo=="Catan" ? "orangered" : "steelblue"
-//        }
-//    }
+            anchors.bottom: parent.bottom
+            width: parent.width
+            height: 1
+            color: "transparent"
+            border.color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+        }
+    }
     barraBotones.tipo: tipo
 
 }

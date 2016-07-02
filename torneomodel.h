@@ -34,6 +34,8 @@ public:
     void updateTorneo(int id,QString nombre,QString tipo);
     void addTorneo(TorneoData *torneo);
 
+    TorneoData *getTorneo(int id);
+
 signals:
 
 public slots:

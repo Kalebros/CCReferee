@@ -67,6 +67,7 @@ NuevoTorneoPageForm {
             torneoData.nombre=torneoField.text
             torneoData.tipo=tipoTorneo
             torneoData.internalID=idTorneo
+            Database.setCurrentTorneo(idTorneo)
             stackPrincipal.pop()
             stackPrincipal.push("qrc:/TorneoPage.qml",{"infoTorneo": torneoData})
         }

@@ -26,6 +26,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 
 import Bardo.CCTorneo.TorneoData 1.0
+import Bardo.CCTorneo.Database 1.0
 import "qrc:/torneoCreacion.js" as ScriptCreacion
 
 Component {
@@ -43,6 +44,7 @@ Component {
                 torneoData.nombre=lNombre.text
                 torneoData.tipo=lTipo.text
                 torneoData.internalID=internalID
+                Database.setCurrentTorneo(internalID)
                 console.log(torneoData.nombre+", "+torneoData.tipo+", "+torneoData.internalID)
                 stackPrincipal.pop()
                 stackPrincipal.push("qrc:/TorneoPage.qml",{ "infoTorneo": torneoData});

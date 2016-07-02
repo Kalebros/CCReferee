@@ -24,6 +24,8 @@
 #include "refereedatabase.h"
 #include <QDebug>
 
+QString RefereeDatabase::currentVersion="1.0";
+
 RefereeDatabase *RefereeDatabase::_instance=0;
 
 RefereeDatabase *RefereeDatabase::instance()
@@ -70,16 +72,40 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
 
         query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.0')");
     }
+    if(checkDatabaseVersion()!=RefereeDatabase::currentVersion)
+        updateToNextVersion();
     _torneos=0;
+    _participantes=0;
+    _currentTorneo=-1;
 }
+
+QString RefereeDatabase::checkDatabaseVersion() const
+{
+    QString res;
+    {
+        QSqlQuery query(_db);
+        query.exec("SELECT databaseVersion FROM Metadata");
+        query.next();
+        res=query.value(0).toString();
+    }
+
+    return res;
+}
+
+void RefereeDatabase::updateToNextVersion()
+{
+    //Update to version 1.0
+    return;
+}
+
 
 TorneoData *RefereeDatabase::getTorneo(int id)
 {
-    TorneoData *data=new TorneoData(this);
+    TorneoData *data=0;
 
-    data->setNombre("Mi Torneo de prueba");
-    data->setTipo("Catan");
-
+    if(_torneos) {
+            data=_torneos->getTorneo(id);
+    }
     return data;
 }
 
@@ -108,6 +134,66 @@ TorneoModel *RefereeDatabase::getTorneoModel()
     _torneos->setListaTorneos(listaTorneos);
 
     return _torneos;
+}
+
+ParticipantesModel *RefereeDatabase::getParticipantesModel()
+{
+    if(_participantes)
+        return _participantes;
+
+    _participantes=new ParticipantesModel(this);
+
+    if(_currentTorneo!=-1) {
+        QList<ParticipanteData*> listaParticipantes;
+        {
+            QSqlQuery query(_db);
+
+            query.prepare("SELECT idParticipante,idTorneo,nombre,checked "
+                          "FROM Participante "
+                          "WHERE idTorneo=:idTorneo");
+            query.bindValue(":idTorneo",_currentTorneo);
+            query.exec();
+
+            while(query.next()) {
+                ParticipanteData *participante=new ParticipanteData(this);
+                participante->setIDParticipante(query.value(0).toInt());
+                participante->setIDTorneo(query.value(1).toInt());
+                participante->setNombre(query.value(2).toString());
+                participante->setChecking(query.value(3).toBool());
+                listaParticipantes.append(participante);
+            }
+        }
+        _participantes->setListaParticipantes(listaParticipantes);
+    }
+
+    return _participantes;
+}
+
+void RefereeDatabase::setCurrentTorneo(int idTorneo)
+{
+    _currentTorneo=idTorneo;
+    if(_participantes) {
+        QList<ParticipanteData*> listaParticipantes;
+        {
+            QSqlQuery query(_db);
+
+            query.prepare("SELECT idParticipante,idTorneo,nombre,checked "
+                          "FROM Participante "
+                          "WHERE idTorneo=:idTorneo");
+            query.bindValue(":idTorneo",_currentTorneo);
+            query.exec();
+
+            while(query.next()) {
+                ParticipanteData *participante=new ParticipanteData(this);
+                participante->setIDParticipante(query.value(0).toInt());
+                participante->setIDTorneo(query.value(1).toInt());
+                participante->setNombre(query.value(2).toString());
+                participante->setChecking(query.value(3).toBool());
+                listaParticipantes.append(participante);
+            }
+        }
+        _participantes->setListaParticipantes(listaParticipantes);
+    }
 }
 
 void RefereeDatabase::updateTorneoData(int id, QString nombre, QString tipo)
@@ -163,3 +249,39 @@ int RefereeDatabase::addTorneo(QString nombre, QString tipo)
     return nuevaID;
 
 }
+
+void RefereeDatabase::updateParticipante(int idParticipante, ParticipanteData *data)
+{
+    {
+        QSqlQuery query(_db);
+        _db.transaction();
+        query.prepare("UPDATE Participante "
+                      "SET idParticipante=:idP,idTorneo=:idTorneo,nombre=:nombre,checked=:isCheck"
+                      "WHERE idParticipante=:id");
+        query.bindValue(":id",idParticipante);
+        query.bindValue(":idP",data->getIDParticipante());
+        query.bindValue(":idTorneo",data->getIDTorneo());
+        query.bindValue(":nombre",data->getNombre());
+        query.bindValue(":isCheck",data->getChecking());
+
+        if(!query.exec())
+            _db.rollback();
+        else _db.commit();
+    }
+}
+
+void RefereeDatabase::checkParticipante(int idParticipante,bool check)
+{
+    {
+        QSqlQuery query(_db);
+        _db.transaction();
+        query.prepare("UPDATE Participante "
+                      "SET checked=:check WHERE idParticipante=:id");
+        query.bindValue(":id",idParticipante);
+        query.bindValue(":check",check);
+        if(!query.exec())
+            _db.rollback();
+        else _db.commit();
+    }
+}
+

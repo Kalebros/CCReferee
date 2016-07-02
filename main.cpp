@@ -29,6 +29,8 @@
 #include "torneodata.h"
 #include "refereedatabase.h"
 #include "torneomodel.h"
+#include "participantedata.h"
+#include "participantesmodel.h"
 
 static QObject * getRefereeDatabase(QQmlEngine*, QJSEngine*)
 {
@@ -46,6 +48,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     TorneoModel *modeloTorneos=RefereeDatabase::instance()->getTorneoModel();
+    ParticipantesModel *modeloParticipantes=RefereeDatabase::instance()->getParticipantesModel();
 
     QQmlContext *contexto=engine.rootContext();
     contexto->setProperty("primaryCatanColor",QColor("orange"));
@@ -53,6 +56,7 @@ int main(int argc, char *argv[])
     contexto->setProperty("secondaryCatanColor",QColor("#FFC107")); //Material.Amber
     contexto->setProperty("secondaryCarcasssonneColor",QColor("#CDDC39")); //Material.Lime
     contexto->setContextProperty("modeloTorneos",modeloTorneos);
+    contexto->setContextProperty("modeloParticipantes",modeloParticipantes);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
 

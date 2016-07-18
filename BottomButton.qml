@@ -24,21 +24,23 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
-import QtQuick.Controls.Material 2.0
+ToolButton {
+    id: bButton
+    implicitHeight: 40
+    implicitWidth: 40
 
-ToolBar {
-    id: bbTbarra
+    property string iconA
+    property string iconB
     property string tipo
 
-    background: Rectangle {
-        implicitHeight: 40
-        color: Material.background
-
-        Rectangle {
-                    width: parent.width
-                    height: 1
-                    anchors.bottom: parent.bottom
-                    color: "transparent"
-                }
+    background: Item {
+        Image {
+            source: bButton.tipo=="Catan" ? bButton.iconA : bButton.iconB
+            anchors.fill: parent
+            z:1
+            opacity: bButton.checked ? 1 : 0.5
+        }
     }
+
+    checkable: true
 }

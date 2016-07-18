@@ -37,6 +37,15 @@ JugadoresPageForm {
         id: vistaJugadores
         anchors.topMargin: 40
         anchors.fill: parent
+//        delegate: ItemDelegate {
+//            Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
+//            width: vistaJugadores.width
+//            text: nombre
+//            onClicked: {
+//                console.log("Clicked on "+nombre)
+//            }
+//        }
+
         delegate: CheckDelegate {
             Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
             width: vistaJugadores.width
@@ -75,36 +84,6 @@ JugadoresPageForm {
                 border.color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
             }
         }
-    }
-
-    BarraBotonesTorneo {
-        id: barraBotones
-        tipo: jugadoresPage.tipo
-        y: 577
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-
-        Row {
-            x: 0
-            y: 0
-            spacing: 1
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ToolButton {
-                id: toolButton1
-                text: qsTr("Nuevo participante")
-            }
-
-            ToolButton {
-                id: toolButton2
-                text: qsTr("Editar participante")
-            }
-        }
-
     }
 
 }

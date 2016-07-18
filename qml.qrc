@@ -22,6 +22,8 @@
         <file>MarcadorParticipantes.qml</file>
         <file>InfoTorneoB.qml</file>
         <file>InfoTorneoBForm.ui.qml</file>
+        <file>JugadoresComplexPage.qml</file>
+        <file>BottomButton.qml</file>
     </qresource>
     <qresource prefix="/images">
         <file>white_arrow.png</file>
@@ -29,5 +31,11 @@
         <file>ic_groupWhite_48px.svg</file>
         <file>ic_description_48px.svg</file>
         <file>ic_descriptionWhite_48px.svg</file>
+        <file>add_person_amber.svg</file>
+        <file>add_person_lime.svg</file>
+        <file>check_person_amber.svg</file>
+        <file>check_person_lime.svg</file>
+        <file>edit_person_amber.svg</file>
+        <file>edit_person_lime.svg</file>
     </qresource>
 </RCC>

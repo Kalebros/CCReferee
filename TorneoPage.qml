@@ -137,7 +137,7 @@ TorneoPageForm {
             }
         }
 
-        JugadoresPage {
+        JugadoresComplexPage {
             id: jugadoresPage
             tipo: infoTorneo.tipo
         }

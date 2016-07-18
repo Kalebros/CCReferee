@@ -60,9 +60,11 @@ JugadoresPageForm {
             width: vistaEdit.width-15
             x: 10
             text: nombre
-            font.pointSize: font.pointSize+1
             onAccepted: {
-                console.log("Nuevo nombre: "+text)
+                nombre=text
+            }
+            onEditingFinished: {
+                nombre=text
             }
         }
         model: modeloParticipantes
@@ -116,7 +118,7 @@ JugadoresPageForm {
             text: nombre
             checked: checking
             onClicked: {
-                Database.checkParticipante(idParticipante,!checking);
+                checking=!checking
             }
         }
         model: modeloParticipantes
@@ -174,6 +176,12 @@ JugadoresPageForm {
         anchors.leftMargin: 129
         anchors.top: addField.bottom
         anchors.topMargin: 15
+        onClicked: {
+            if(addField.text) {
+                Database.addParticipante(addField.text)
+                addField.clear();
+            }
+        }
     }
     states: [
         State {

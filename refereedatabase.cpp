@@ -256,16 +256,16 @@ void RefereeDatabase::updateParticipante(int idParticipante, ParticipanteData *d
         QSqlQuery query(_db);
         _db.transaction();
         query.prepare("UPDATE Participante "
-                      "SET idParticipante=:idP,idTorneo=:idTorneo,nombre=:nombre,checked=:isCheck"
+                      "SET idTorneo=:idTorneo,nombre=:nombre,checked=:isCheck "
                       "WHERE idParticipante=:id");
         query.bindValue(":id",idParticipante);
-        query.bindValue(":idP",data->getIDParticipante());
         query.bindValue(":idTorneo",data->getIDTorneo());
         query.bindValue(":nombre",data->getNombre());
         query.bindValue(":isCheck",data->getChecking());
 
-        if(!query.exec())
+        if(!query.exec()) {
             _db.rollback();
+        }
         else _db.commit();
     }
 }
@@ -283,5 +283,34 @@ void RefereeDatabase::checkParticipante(int idParticipante,bool check)
             _db.rollback();
         else _db.commit();
     }
+}
+
+void RefereeDatabase::addParticipante(QString nombre)
+{
+    int idJugador;
+    {
+        QSqlQuery query(_db);
+        _db.transaction();
+        query.prepare("INSERT INTO Participante(idTorneo,nombre) "
+                      "VALUES(:idTorneo,:nombre)");
+        query.bindValue(":idTorneo",_currentTorneo);
+        query.bindValue(":nombre",nombre);
+
+        if(!query.exec())
+            _db.rollback();
+        else {
+            _db.commit();
+            query.exec("SELECT last_insert_rowid()");
+            query.next();
+            idJugador=query.value(0).toInt();
+        }
+    }
+    ParticipanteData *nuevoParticipante=new ParticipanteData(this);
+    nuevoParticipante->setIDParticipante(idJugador);
+    nuevoParticipante->setNombre(nombre);
+    nuevoParticipante->setChecking(false);
+    nuevoParticipante->setIDTorneo(_currentTorneo);
+
+    _participantes->addParticipante(nuevoParticipante);
 }
 

@@ -35,6 +35,7 @@ public:
     Q_INVOKABLE int addTorneo(QString nombre, QString tipo);
     Q_INVOKABLE void setCurrentTorneo(int idTorneo);
     Q_INVOKABLE void checkParticipante(int idParticipante,bool check);
+    Q_INVOKABLE void addParticipante(QString nombre);
 
     void updateParticipante(int idParticipante,ParticipanteData *data);
 

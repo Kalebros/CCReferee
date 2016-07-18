@@ -28,6 +28,7 @@ public:
     QHash<int,QByteArray> roleNames() const;
 
     void setListaParticipantes(QList<ParticipanteData*> lista);
+    void addParticipante(ParticipanteData *data);
 
 signals:
 

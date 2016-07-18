@@ -1,6 +1,7 @@
 #include "participantesmodel.h"
 #include "refereedatabase.h"
 
+#include <QDebug>
 
 ParticipantesModel::ParticipantesModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -103,5 +104,14 @@ void ParticipantesModel::setListaParticipantes(QList<ParticipanteData*> lista)
         delete data;
     _listaParticipantes.clear();
     _listaParticipantes=lista;
+    endResetModel();
+}
+
+void ParticipantesModel::addParticipante(ParticipanteData *data)
+{
+    beginInsertRows(index(0,0),_listaParticipantes.count(),_listaParticipantes.count());
+    _listaParticipantes.append(data);
+    endInsertRows();
+    beginResetModel();
     endResetModel();
 }

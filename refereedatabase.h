@@ -23,6 +23,9 @@ class RefereeDatabase : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(int estimacionMesas READ estimacionMesas NOTIFY changedEstimacion)
+    Q_PROPERTY(int numeroMesas READ numeroMesas NOTIFY changedNumeroMesas)
+
 public:
 
     static RefereeDatabase *instance();
@@ -39,9 +42,13 @@ public:
 
     void updateParticipante(int idParticipante,ParticipanteData *data);
 
+    int estimacionMesas() const;
+    int numeroMesas() const;
 
 signals:
 
+    void changedEstimacion(int n);
+    void changedNumeroMesas(int n);
 
 public slots:
 
@@ -59,6 +66,11 @@ private:
 
     void updateToNextVersion();
     QString checkDatabaseVersion() const;
+
+private slots:
+
+    void updateEstimacionMesas(int n);
+    void updateNumeroMesas(int n);
 };
 
 #endif // REFEREEDATABASE_H

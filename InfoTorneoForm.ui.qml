@@ -8,6 +8,8 @@ Item {
     id: item1
     width: 358
     height: 642
+    property alias marcadorReales: marcadorReales
+    property alias marcadorPrevistas: marcadorPrevision
     property alias marcadorChecked: marcadorChecked
     property alias marcadorActuales: marcadorActuales
     property alias tipoComboBox: comboBox1
@@ -126,13 +128,13 @@ Item {
         Layout.preferredWidth: 286
 
         MarcadorParticipantes {
-            id: marcadorActuales1
+            id: marcadorPrevision
             texto: "Previstas"
             numero: "0"
         }
 
         MarcadorParticipantes {
-            id: marcadorChecked1
+            id: marcadorReales
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             texto: "Reales"
             numero: "0"

@@ -28,6 +28,8 @@ import QtQuick.Controls.Material 2.0
 Item {
     property string texto
     property string numero
+    property color color
+    property int limite
 
     id: marcador
     implicitHeight: textLabel.height + numberLabel.height + 5
@@ -46,7 +48,7 @@ Item {
         anchors.topMargin: 5
         text: numero
         font.pointSize: 25
-        color: numero<8 ? "red" : "black"
+        color: numero<limite ? "red" : marcador.color
     }
 
 }

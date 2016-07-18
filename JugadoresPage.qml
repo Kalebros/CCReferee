@@ -38,7 +38,7 @@ JugadoresPageForm {
         height: 95
         text: qsTr("Añadir nuevo participante")
         color: tipo=="Catan" ? root.secondaryCatan : root.secondaryCarca
-        visible: false
+        visible: true
         wrapMode: Text.WordWrap
         anchors.top: parent.top
         anchors.topMargin: 45
@@ -52,7 +52,7 @@ JugadoresPageForm {
 
     ListView {
         id: vistaEdit
-        visible: true
+        visible: false
         anchors.fill: parent
         anchors.topMargin: 40
         delegate: TextField {
@@ -156,7 +156,7 @@ JugadoresPageForm {
         id: addField
         y: 321
         height: 40
-        visible: false
+        visible: true
         placeholderText: qsTr("Nombre del participante")
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
@@ -169,7 +169,7 @@ JugadoresPageForm {
     Button {
         id: addButton
         text: qsTr("Añadir")
-        visible: false
+        visible: true
         anchors.right: parent.right
         anchors.rightMargin: 129
         anchors.left: parent.left
@@ -185,7 +185,7 @@ JugadoresPageForm {
     }
     states: [
         State {
-            name: "addJugador"
+            name: "editJugador"
 
             PropertyChanges {
                 target: vistaCheck
@@ -195,23 +195,23 @@ JugadoresPageForm {
             PropertyChanges {
                 target: actionLabel
                 text: qsTr("Añadir nuevo participante")
-                visible: true
+                visible: false
             }
 
             PropertyChanges {
                 target: addField
                 text: qsTr("")
-                visible: true
+                visible: false
             }
 
             PropertyChanges {
                 target: addButton
-                visible: true
+                visible: false
             }
 
             PropertyChanges {
                 target: vistaEdit
-                visible: false
+                visible: true
             }
         },
         State {
@@ -224,6 +224,21 @@ JugadoresPageForm {
 
             PropertyChanges {
                 target: vistaEdit
+                visible: false
+            }
+
+            PropertyChanges {
+                target: actionLabel
+                visible: false
+            }
+
+            PropertyChanges {
+                target: addField
+                visible: false
+            }
+
+            PropertyChanges {
+                target: addButton
                 visible: false
             }
         }

@@ -136,12 +136,28 @@ TorneoModel *RefereeDatabase::getTorneoModel()
     return _torneos;
 }
 
+void RefereeDatabase::updateEstimacionMesas(int n)
+{
+    Q_UNUSED(n)
+    emit changedEstimacion(estimacionMesas());
+}
+
+void RefereeDatabase::updateNumeroMesas(int n)
+{
+    Q_UNUSED(n)
+    emit changedNumeroMesas(numeroMesas());
+}
+
 ParticipantesModel *RefereeDatabase::getParticipantesModel()
 {
     if(_participantes)
         return _participantes;
 
     _participantes=new ParticipantesModel(this);
+
+    //Conexiones
+    connect(_participantes,SIGNAL(changedNumeroParticipantes(int)),this,SLOT(updateEstimacionMesas(int)));
+    connect(_participantes,SIGNAL(changedParticipantesCheck(int)),this,SLOT(updateNumeroMesas(int)));
 
     if(_currentTorneo!=-1) {
         QList<ParticipanteData*> listaParticipantes;
@@ -283,6 +299,36 @@ void RefereeDatabase::checkParticipante(int idParticipante,bool check)
             _db.rollback();
         else _db.commit();
     }
+}
+
+int RefereeDatabase::estimacionMesas() const
+{
+    int nJugadores=_participantes->numeroParticipantes();
+    if(nJugadores<8)
+        return 0;
+    if(!(nJugadores%4))
+        return nJugadores/(int)4;
+    else if(!((nJugadores-3)%4))
+        return ((nJugadores-3)%4)+1;
+    else if(!((nJugadores-6)%4))
+        return ((nJugadores-6)%4)+2;
+    else return ((nJugadores-9)%4)+3;
+    return 0;
+}
+
+int RefereeDatabase::numeroMesas() const
+{
+    int nJugadores=_participantes->participantesCheck();
+    if(nJugadores<8)
+        return 0;
+    if(!(nJugadores%4))
+        return nJugadores/(int)4;
+    else if(!((nJugadores-3)%4))
+        return ((nJugadores-3)%4)+1;
+    else if(!((nJugadores-6)%4))
+        return ((nJugadores-6)%4)+2;
+    else return ((nJugadores-9)%4)+3;
+    return 0;
 }
 
 void RefereeDatabase::addParticipante(QString nombre)

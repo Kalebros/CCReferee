@@ -42,7 +42,7 @@ JugadoresPageForm {
             tipo: jugadoresComplexPage.tipo
             width: jComplexStack.width
             height: jComplexStack.height
-                    }
+        }
     }
 
     BarraBotonesTorneo {
@@ -72,10 +72,21 @@ JugadoresPageForm {
                 iconB: "qrc:/images/add_person_lime.svg"
                 tipo: jugadoresComplexPage.tipo
                 onClicked: {
-                    jugadoresPageInicial.state="addJugador"
+                    jugadoresPageInicial.state=""
                 }
-
+                checked: true
                 ButtonGroup.group: bGroup
+            }
+
+            BottomButton {
+                id: toolButton3
+                iconA: "qrc:/images/check_person_amber.svg"
+                iconB: "qrc:/images/check_person_lime.svg"
+                ButtonGroup.group: bGroup
+                tipo: jugadoresComplexPage.tipo
+                onClicked: {
+                    jugadoresPageInicial.state="checkJugador"
+                }
             }
 
             BottomButton {
@@ -85,18 +96,7 @@ JugadoresPageForm {
                 ButtonGroup.group: bGroup
                 tipo: jugadoresComplexPage.tipo
                 onClicked: {
-                    jugadoresPageInicial.state=""
-                }
-                checked: true
-            }
-            BottomButton {
-                id: toolButton3
-                iconA: "qrc:/images/check_person_amber.svg"
-                iconB: "qrc:/images/check_person_lime.svg"
-                ButtonGroup.group: bGroup
-                tipo: jugadoresComplexPage.tipo
-                onClicked: {
-                    jugadoresPageInicial.state="checkJugador"
+                    jugadoresPageInicial.state="editJugador"
                 }
             }
         }

@@ -45,29 +45,6 @@ JugadoresPageForm {
                     }
     }
 
-    Rectangle {
-        id: rectangle1
-        y: 544
-        z: 1
-        height: 40
-        anchors.bottom: barraBotones.top
-        anchors.right: parent.right
-        anchors.left: parent.left
-        color: Material.background
-        visible: false
-        TextField {
-            id: addField
-            anchors.fill: parent
-            text: ""
-            placeholderText: "Nuevo jugador"
-            anchors.rightMargin: 18
-            anchors.leftMargin: 18
-            Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
-        }
-
-    }
-
-
     BarraBotonesTorneo {
         id: barraBotones
         tipo: jugadoresComplexPage.tipo
@@ -93,12 +70,11 @@ JugadoresPageForm {
                 id: toolButton1
                 iconA: "qrc:/images/add_person_amber.svg"
                 iconB: "qrc:/images/add_person_lime.svg"
-                onClicked: {
-                    if(rectangle1.visible)
-                        rectangle1.visible=false
-                    else rectangle1.visible=true
-                }
                 tipo: jugadoresComplexPage.tipo
+                onClicked: {
+                    jugadoresPageInicial.state="addJugador"
+                }
+
                 ButtonGroup.group: bGroup
             }
 
@@ -108,14 +84,20 @@ JugadoresPageForm {
                 iconB: "qrc:/images/edit_person_lime.svg"
                 ButtonGroup.group: bGroup
                 tipo: jugadoresComplexPage.tipo
+                onClicked: {
+                    jugadoresPageInicial.state=""
+                }
+                checked: true
             }
             BottomButton {
                 id: toolButton3
                 iconA: "qrc:/images/check_person_amber.svg"
                 iconB: "qrc:/images/check_person_lime.svg"
-                checked: true
                 ButtonGroup.group: bGroup
                 tipo: jugadoresComplexPage.tipo
+                onClicked: {
+                    jugadoresPageInicial.state="checkJugador"
+                }
             }
         }
 

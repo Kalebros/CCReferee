@@ -42,7 +42,7 @@ ApplicationWindow {
     property color primaryCatan: "orangered"
     property color secondaryCatan: "#FFC107" //Material.Amber
     property color primaryCarca: "steelblue"
-    property color secondaryCarca: "#CDDC39" //Material.Lime
+    property color secondaryCarca: "#4CAF50" //Material.Green
 
 
     StackView {

@@ -33,46 +33,55 @@ JugadoresPageForm {
     id: jugadoresPage
     property string tipo
 
-    ListView {
-        id: vistaJugadores
-        anchors.topMargin: 40
-        anchors.fill: parent
-//        delegate: ItemDelegate {
-//            Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
-//            width: vistaJugadores.width
-//            text: nombre
-//            onClicked: {
-//                console.log("Clicked on "+nombre)
-//            }
-//        }
+    Label {
+        id: actionLabel
+        height: 95
+        text: qsTr("Añadir nuevo participante")
+        color: tipo=="Catan" ? root.secondaryCatan : root.secondaryCarca
+        visible: false
+        wrapMode: Text.WordWrap
+        anchors.top: parent.top
+        anchors.topMargin: 45
+        anchors.right: parent.right
+        anchors.rightMargin: 66
+        anchors.left: parent.left
+        anchors.leftMargin: 8
+        z: 1
+        font.pointSize: 30
+    }
 
-        delegate: CheckDelegate {
+    ListView {
+        id: vistaEdit
+        visible: true
+        anchors.fill: parent
+        anchors.topMargin: 40
+        delegate: TextField {
             Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
-            width: vistaJugadores.width
+            width: vistaEdit.width-15
+            x: 10
             text: nombre
-            checked: checking
-            onClicked: {
-                Database.checkParticipante(idParticipante,!checking);
+            font.pointSize: font.pointSize+1
+            onAccepted: {
+                console.log("Nuevo nombre: "+text)
             }
         }
         model: modeloParticipantes
         header:Rectangle {
             width: parent.width
             height: 40
-            color: "white"
-                Label {
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "Nombre"
-                    color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
-                }
-                Label {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
-                    text: "Checking"
+            color: Material.background
+            Label {
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.top: parent.top
+                anchors.topMargin: 4
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Pulsa para editar"
+                wrapMode: Text.WordWrap
+                font.pointSize: 20
+                color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
             }
 
             Rectangle {
@@ -85,5 +94,131 @@ JugadoresPageForm {
             }
         }
     }
+
+
+    ListView {
+        id: vistaCheck
+        visible: false
+        anchors.fill: parent
+        anchors.topMargin: 40
+        //        delegate: ItemDelegate {
+        //            Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
+        //            width: vistaJugadores.width
+        //            text: nombre
+        //            onClicked: {
+        //                console.log("Clicked on "+nombre)
+        //            }
+        //        }
+
+        delegate: CheckDelegate {
+            Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
+            width: vistaCheck.width
+            text: nombre
+            checked: checking
+            onClicked: {
+                Database.checkParticipante(idParticipante,!checking);
+            }
+        }
+        model: modeloParticipantes
+        header:Rectangle {
+            width: parent.width
+            height: 40
+            color: Material.background
+            Label {
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Nombre"
+                color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+            }
+            Label {
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+                text: "Checking"
+            }
+
+            Rectangle {
+
+                anchors.bottom: parent.bottom
+                width: parent.width
+                height: 1
+                color: "transparent"
+                border.color: tipo=="Catan" ? root.primaryCatan : root.primaryCarca
+            }
+        }
+    }
+
+    TextField {
+        id: addField
+        y: 321
+        height: 40
+        visible: false
+        placeholderText: qsTr("Nombre del participante")
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 22
+        anchors.left: parent.left
+        anchors.leftMargin: 21
+        Material.accent: tipo=="Catan" ? Material.Amber : Material.Green
+    }
+
+    Button {
+        id: addButton
+        text: qsTr("Añadir")
+        visible: false
+        anchors.right: parent.right
+        anchors.rightMargin: 129
+        anchors.left: parent.left
+        anchors.leftMargin: 129
+        anchors.top: addField.bottom
+        anchors.topMargin: 15
+    }
+    states: [
+        State {
+            name: "addJugador"
+
+            PropertyChanges {
+                target: vistaCheck
+                visible: false
+            }
+
+            PropertyChanges {
+                target: actionLabel
+                text: qsTr("Añadir nuevo participante")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: addField
+                text: qsTr("")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: addButton
+                visible: true
+            }
+
+            PropertyChanges {
+                target: vistaEdit
+                visible: false
+            }
+        },
+        State {
+            name: "checkJugador"
+
+            PropertyChanges {
+                target: vistaCheck
+                visible: true
+            }
+
+            PropertyChanges {
+                target: vistaEdit
+                visible: false
+            }
+        }
+    ]
 
 }

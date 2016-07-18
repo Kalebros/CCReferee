@@ -52,6 +52,8 @@ InfoTorneoForm {
     }
 
     tipoComboBox.currentIndex: infoTorneo.tipo=="Catan" ? 0 : 1
+    marcadorActuales.numero: modeloParticipantes.numeroParticipantes
+    marcadorChecked.numero: modeloParticipantes.participantesCheck
 
     tipoComboBox.onCurrentTextChanged: {
         infoTorneo.tipo=tipoComboBox.currentText

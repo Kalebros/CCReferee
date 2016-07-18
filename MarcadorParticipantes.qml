@@ -46,7 +46,7 @@ Item {
         anchors.topMargin: 5
         text: numero
         font.pointSize: 25
-
+        color: numero<8 ? "red" : "black"
     }
 
 }

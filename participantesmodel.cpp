@@ -8,6 +8,20 @@ ParticipantesModel::ParticipantesModel(QObject *parent) : QAbstractListModel(par
     _listaParticipantes=QList<ParticipanteData*>();
 }
 
+int ParticipantesModel::numeroParticipantes() const
+{
+    return _listaParticipantes.count();
+}
+
+int ParticipantesModel::participantesCheck() const
+{
+    int nCheck=0;
+    foreach(ParticipanteData *participante, _listaParticipantes)
+        nCheck+=participante->getChecking();
+
+    return nCheck;
+}
+
 QHash<int,QByteArray> ParticipantesModel::roleNames() const
 {
     QHash<int,QByteArray> roles;
@@ -86,6 +100,7 @@ bool ParticipantesModel::setData(const QModelIndex &index, const QVariant &value
         break;
     case CheckedRole:
         _listaParticipantes[index.row()]->setChecking(value.toBool());
+        emit changedParticipantesCheck(participantesCheck());
         break;
     default:
         break;
@@ -114,4 +129,5 @@ void ParticipantesModel::addParticipante(ParticipanteData *data)
     endInsertRows();
     beginResetModel();
     endResetModel();
+    emit changedNumeroParticipantes(_listaParticipantes.count());
 }

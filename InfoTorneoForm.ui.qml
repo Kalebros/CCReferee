@@ -8,6 +8,8 @@ Item {
     id: item1
     width: 358
     height: 642
+    property alias marcadorChecked: marcadorChecked
+    property alias marcadorActuales: marcadorActuales
     property alias tipoComboBox: comboBox1
     property alias nombreField: textField1
     property string tipo

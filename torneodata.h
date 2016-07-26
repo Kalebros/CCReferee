@@ -9,6 +9,7 @@ class TorneoData : public QObject
     Q_PROPERTY(QString nombre READ nombre WRITE setNombre NOTIFY nombreChanged)
     Q_PROPERTY(QString tipo READ tipo WRITE setTipo NOTIFY tipoChanged)
     Q_PROPERTY(int internalID READ internalID WRITE setInternalID NOTIFY internalIDChanged)
+    Q_PROPERTY(int minimoJugadores READ minimoJugadores NOTIFY changedMinimoJugadores)
 public:
     explicit TorneoData(QObject *parent = 0);
 
@@ -21,12 +22,15 @@ public:
     int internalID() const
     { return _internalID; }
 
+    int minimoJugadores() const;
+
 
 signals:
 
     void nombreChanged(QString n);
     void tipoChanged(QString t);
     void internalIDChanged(int id);
+    void changedMinimoJugadores(int n);
 
 public slots:
 

@@ -20,8 +20,6 @@
         <file>InfoTorneoForm.ui.qml</file>
         <file>torneoCreacion.js</file>
         <file>MarcadorParticipantes.qml</file>
-        <file>InfoTorneoB.qml</file>
-        <file>InfoTorneoBForm.ui.qml</file>
         <file>JugadoresComplexPage.qml</file>
         <file>BottomButton.qml</file>
     </qresource>

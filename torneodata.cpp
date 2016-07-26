@@ -40,10 +40,20 @@ void TorneoData::setTipo(QString t)
 {
     _tipo=t;
     emit tipoChanged(_tipo);
+    if(_tipo=="Catan")
+        emit changedMinimoJugadores(12);
+    else emit changedMinimoJugadores(8);
 }
 
 void TorneoData::setInternalID(int id)
 {
     _internalID=id;
     emit internalIDChanged(_internalID);
+}
+
+int TorneoData::minimoJugadores() const
+{
+    if(_tipo=="Catan")
+        return 12;
+    else return 8;
 }

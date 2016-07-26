@@ -52,18 +52,19 @@ InfoTorneoForm {
     }
 
     tipoComboBox.currentIndex: infoTorneo.tipo=="Catan" ? 0 : 1
+    marcadorMinimo.numero: infoTorneo.minimoJugadores
     marcadorActuales.color: tipo=="Catan" ? root.secondaryCatan : root.secondaryCarca
-    marcadorActuales.limite: 8
+    marcadorActuales.limite: infoTorneo.minimoJugadores
     marcadorChecked.color: tipo=="Catan" ? root.secondaryCatan : root.secondaryCarca
-    marcadorChecked.limite: 8
+    marcadorChecked.limite: infoTorneo.minimoJugadores
     marcadorActuales.numero: modeloParticipantes.numeroParticipantes
     marcadorChecked.numero: modeloParticipantes.participantesCheck
     marcadorPrevistas.limite: 1
     marcadorPrevistas.color: tipo=="Catan" ? root.secondaryCatan : root.secondaryCarca
     marcadorReales.color: tipo=="Catan" ? root.secondaryCatan : root.secondaryCarca
     marcadorReales.limite: 1
-    marcadorPrevistas.numero: Database.estimacionMesas
-    marcadorReales.numero: Database.numeroMesas
+    marcadorPrevistas.numero: modeloParticipantes.numeroParticipantes<infoTorneo.minimoJugadores ? 0 : Database.estimacionMesas
+    marcadorReales.numero: modeloParticipantes.numeroParticipantes<infoTorneo.minimoJugadores ? 0 : Database.numeroMesas
 
     tipoComboBox.onCurrentTextChanged: {
         infoTorneo.tipo=tipoComboBox.currentText

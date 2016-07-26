@@ -76,6 +76,7 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
         updateToNextVersion();
     _torneos=0;
     _participantes=0;
+    _currentTorneoData=0;
     _currentTorneo=-1;
 }
 
@@ -148,6 +149,15 @@ void RefereeDatabase::updateNumeroMesas(int n)
     emit changedNumeroMesas(numeroMesas());
 }
 
+int RefereeDatabase::minimoJugadores() const
+{
+   if(!_currentTorneoData)
+       return -1;
+   if(_currentTorneoData->tipo()=="Catan")
+       return 12;
+   else return 8;
+}
+
 ParticipantesModel *RefereeDatabase::getParticipantesModel()
 {
     if(_participantes)
@@ -188,6 +198,7 @@ ParticipantesModel *RefereeDatabase::getParticipantesModel()
 void RefereeDatabase::setCurrentTorneo(int idTorneo)
 {
     _currentTorneo=idTorneo;
+    _currentTorneoData=getTorneo(idTorneo);
     if(_participantes) {
         QList<ParticipanteData*> listaParticipantes;
         {
@@ -209,6 +220,9 @@ void RefereeDatabase::setCurrentTorneo(int idTorneo)
             }
         }
         _participantes->setListaParticipantes(listaParticipantes);
+        if(_currentTorneoData->tipo()=="Catan")
+            emit changedMinimoJugadores(12);
+        else emit changedMinimoJugadores(8);
     }
 }
 

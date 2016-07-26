@@ -8,6 +8,7 @@ Item {
     id: item1
     width: 358
     height: 642
+    property alias marcadorMinimo: marcadorMinimo
     property alias marcadorReales: marcadorReales
     property alias marcadorPrevistas: marcadorPrevision
     property alias marcadorChecked: marcadorChecked

@@ -25,6 +25,7 @@ class RefereeDatabase : public QObject
 
     Q_PROPERTY(int estimacionMesas READ estimacionMesas NOTIFY changedEstimacion)
     Q_PROPERTY(int numeroMesas READ numeroMesas NOTIFY changedNumeroMesas)
+    Q_PROPERTY(int minimoJugadores READ minimoJugadores NOTIFY changedMinimoJugadores)
 
 public:
 
@@ -44,11 +45,13 @@ public:
 
     int estimacionMesas() const;
     int numeroMesas() const;
+    int minimoJugadores() const;
 
 signals:
 
     void changedEstimacion(int n);
     void changedNumeroMesas(int n);
+    void changedMinimoJugadores(int n);
 
 public slots:
 
@@ -61,6 +64,7 @@ private:
 
     QSqlDatabase _db;
     int _currentTorneo;
+    TorneoData *_currentTorneoData;
     TorneoModel *_torneos;
     ParticipantesModel *_participantes;
 

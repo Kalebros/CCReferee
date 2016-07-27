@@ -30,7 +30,7 @@ TorneoPageForm {
     id: tPage
     property TorneoData infoTorneo
 
-    property var listaNombres: ["Información del torneo","Participantes"]
+    property var listaNombres: ["Información del torneo","Participantes","Arbitraje"]
 
     anchors.fill: parent
 
@@ -117,6 +117,25 @@ TorneoPageForm {
                     }
                 }
             }
+            TabButton {
+                id: botonC
+                Material.accent: "white"
+                background: Rectangle {
+                    color: rHead.color
+                    border.color: "transparent"
+                    Image {
+                        id: iconTabC
+                        height: 30
+                        width: 30
+                        source: botonC.checked ? "qrc:/images/ic_casino_blanco.svg" : "qrc:/images/ic_casino_48px.svg"
+                        opacity:  botonC.checked ? 1 : 0.7
+                        smooth: true
+                        antialiasing: true
+                        anchors.centerIn: parent
+                    }
+                }
+            }
+
 
         }
     }
@@ -140,6 +159,11 @@ TorneoPageForm {
         JugadoresComplexPage {
             id: jugadoresPage
             tipo: infoTorneo.tipo
+        }
+
+        ArbitrajePage {
+            id: arbitroPage
+            torneo: infoTorneo
         }
 
         ScrollBar.vertical: ScrollBar {}

@@ -22,6 +22,8 @@
         <file>MarcadorParticipantes.qml</file>
         <file>JugadoresComplexPage.qml</file>
         <file>BottomButton.qml</file>
+        <file>ArbitrajePage.qml</file>
+        <file>ArbitrajePageForm.ui.qml</file>
     </qresource>
     <qresource prefix="/images">
         <file>white_arrow.png</file>
@@ -35,5 +37,13 @@
         <file>check_person_lime.svg</file>
         <file>edit_person_amber.svg</file>
         <file>edit_person_lime.svg</file>
+        <file>ic_casino_48px.svg</file>
+        <file>ic_casino_blanco.svg</file>
+        <file>circle-one-lime.svg</file>
+        <file>circle-one-amber.svg</file>
+        <file>circle-three-amber.svg</file>
+        <file>circle-two-amber.svg</file>
+        <file>circle-three-lime.svg</file>
+        <file>circle-two-lime.svg</file>
     </qresource>
 </RCC>

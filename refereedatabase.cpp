@@ -345,6 +345,14 @@ int RefereeDatabase::numeroMesas() const
     return 0;
 }
 
+bool RefereeDatabase::isReady() const
+{
+    if(_participantes->participantesCheck()>=_currentTorneoData->minimoJugadores())
+        return true;
+    else return false;
+}
+
+
 void RefereeDatabase::addParticipante(QString nombre)
 {
     int idJugador;

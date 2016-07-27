@@ -26,6 +26,7 @@ class RefereeDatabase : public QObject
     Q_PROPERTY(int estimacionMesas READ estimacionMesas NOTIFY changedEstimacion)
     Q_PROPERTY(int numeroMesas READ numeroMesas NOTIFY changedNumeroMesas)
     Q_PROPERTY(int minimoJugadores READ minimoJugadores NOTIFY changedMinimoJugadores)
+    Q_PROPERTY(bool ready READ isReady NOTIFY changedReady)
 
 public:
 
@@ -46,12 +47,14 @@ public:
     int estimacionMesas() const;
     int numeroMesas() const;
     int minimoJugadores() const;
+    bool isReady() const;
 
 signals:
 
     void changedEstimacion(int n);
     void changedNumeroMesas(int n);
     void changedMinimoJugadores(int n);
+    void changedReady(bool t);
 
 public slots:
 

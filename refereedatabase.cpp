@@ -24,7 +24,7 @@
 #include "refereedatabase.h"
 #include <QDebug>
 
-QString RefereeDatabase::currentVersion="1.0";
+QString RefereeDatabase::currentVersion="1.1";
 
 RefereeDatabase *RefereeDatabase::_instance=0;
 
@@ -70,7 +70,29 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
                    "FOREIGN KEY(idTorneo) REFERENCES Torneo(idTorneo)"
                    ")");
 
-        query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.0')");
+        query.exec("CREATE TABLE IF NOT EXISTS Ronda "
+                      "("
+                      "idRonda INTEGER PRIMARY KEY AUTOINCREMENT, "
+                      "idTorneo INTEGER NOT NULL, "
+                      "nombreRonda TEXT NOT NULL DEFAULT 'Primera Ronda', "
+                      "FOREIGN KEY(idTorneo) REFERENCES Torneo(idTorneo) "
+                      ")");
+        query.exec("CREATE TABLE IF NOT EXISTS Mesa "
+                   "("
+                   "idMesa INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "idRonda INTEGER NOT NULL, "
+                   "nombreMesa TEXT NOT NULL, "
+                   "FOREIGN KEY(idRonda) REFERENCES Ronda(idRonda) "
+                   ")");
+        query.exec("CREATE TABLE IF NOT EXISTS Mesa "
+                   "("
+                   "idMesa INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "idRonda INTEGER NOT NULL, "
+                   "nombreMesa TEXT NOT NULL, "
+                   "FOREIGN KEY(idRonda) REFERENCES Ronda(idRonda) "
+                   ")");
+
+        query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.1')");
     }
     if(checkDatabaseVersion()!=RefereeDatabase::currentVersion)
         updateToNextVersion();
@@ -95,7 +117,35 @@ QString RefereeDatabase::checkDatabaseVersion() const
 
 void RefereeDatabase::updateToNextVersion()
 {
-    //Update to version 1.0
+    QString dbVersion=checkDatabaseVersion();
+    //Update de 1.0 a 1.1
+    if(dbVersion==QStringLiteral("1.0"))
+    {
+        QSqlQuery query(_db);
+        query.exec("CREATE TABLE IF NOT EXISTS Ronda "
+                      "("
+                      "idRonda INTEGER PRIMARY KEY AUTOINCREMENT, "
+                      "idTorneo INTEGER NOT NULL, "
+                      "nombreRonda TEXT NOT NULL DEFAULT 'Primera Ronda', "
+                      "FOREIGN KEY(idTorneo) REFERENCES Torneo(idTorneo) "
+                      ")");
+        query.exec("CREATE TABLE IF NOT EXISTS Mesa "
+                   "("
+                   "idMesa INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "idRonda INTEGER NOT NULL, "
+                   "nombreMesa TEXT NOT NULL, "
+                   "FOREIGN KEY(idRonda) REFERENCES Ronda(idRonda) "
+                   ")");
+        query.exec("CREATE TABLE IF NOT EXISTS Mesa "
+                   "("
+                   "idMesa INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "idRonda INTEGER NOT NULL, "
+                   "nombreMesa TEXT NOT NULL, "
+                   "FOREIGN KEY(idRonda) REFERENCES Ronda(idRonda) "
+                   ")");
+        query.exec("UPDATE Metadata SET databaseVersion='1.1' "
+                   "WHERE databaseVersion='1.0'");
+    }
     return;
 }
 

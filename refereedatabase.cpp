@@ -24,7 +24,7 @@
 #include "refereedatabase.h"
 #include <QDebug>
 
-QString RefereeDatabase::currentVersion="1.1";
+QString RefereeDatabase::currentVersion="1.3";
 
 RefereeDatabase *RefereeDatabase::_instance=0;
 
@@ -38,6 +38,9 @@ RefereeDatabase *RefereeDatabase::instance()
 
 RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
 {
+    //Preparar reloj
+    begining=std::chrono::high_resolution_clock::now();
+
     //Crear la base de datos
     _db=QSqlDatabase::addDatabase("QSQLITE");
 
@@ -51,6 +54,8 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
 
     if(needToBuild) {
         QSqlQuery query(_db);
+
+        //Hay que usar transacciones para mayor seguridad
 
         query.exec("CREATE TABLE IF NOT EXISTS Metadata ("
                    "databaseVersion TEXT NOT NULL"
@@ -92,7 +97,19 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
                    "FOREIGN KEY(idRonda) REFERENCES Ronda(idRonda) "
                    ")");
 
-        query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.1')");
+        query.exec("CREATE TABLE IF NOT EXISTS JugadorParticipaEnMesa "
+                   "("
+                   "idJugador INTEGER NOT NULL, "
+                   "idMesa INTEGER NOT NULL, "
+                   "puntuacionReal INTEGER NOT NULL DEFAULT 0, "
+                   "puntuacionGeneral INTEGER NOT NULL DEFAULT 0, "
+                   "puntuacionCorregida INTEGER NOT NULL DEFAULT 0, "
+                   "FOREIGN KEY(idJugador) REFERENCES Jugador(idJugador), "
+                   "FOREIGN KEY(idMesa) REFERENCES Mesa(idMesa), "
+                   "PRIMARY KEY (idJugador,idMesa)"
+                   ")");
+
+        query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.3')");
     }
     if(checkDatabaseVersion()!=RefereeDatabase::currentVersion)
         updateToNextVersion();
@@ -100,6 +117,8 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
     _participantes=0;
     _currentTorneoData=0;
     _currentTorneo=-1;
+
+    //Preparar reloj
 }
 
 QString RefereeDatabase::checkDatabaseVersion() const
@@ -121,6 +140,8 @@ void RefereeDatabase::updateToNextVersion()
     //Update de 1.0 a 1.1
     if(dbVersion==QStringLiteral("1.0"))
     {
+        //Más seguro utilizando transacciones,
+        //para refactorizar más adelante
         QSqlQuery query(_db);
         query.exec("CREATE TABLE IF NOT EXISTS Ronda "
                       "("
@@ -145,6 +166,33 @@ void RefereeDatabase::updateToNextVersion()
                    ")");
         query.exec("UPDATE Metadata SET databaseVersion='1.1' "
                    "WHERE databaseVersion='1.0'");
+        dbVersion=QStringLiteral("1.1");
+    }
+    if(dbVersion==QStringLiteral("1.1"))
+    {
+        QSqlQuery query(_db);
+        query.exec("CREATE TABLE IF NOT EXISTS JugadorParticipaEnMesa "
+                   "("
+                   "idJugador INTEGER NOT NULL, "
+                   "idMesa INTEGER NOT NULL, "
+                   "puntuacionReal INTEGER NOT NULL DEFAULT 0, "
+                   "puntuacionGeneral INTEGER NOT NULL DEFAULT 0, "
+                   "FOREIGN KEY(idJugador) REFERENCES Jugador(idJugador), "
+                   "FOREIGN KEY(idMesa) REFERENCES Mesa(idMesa), "
+                   "PRIMARY KEY (idJugador,idMesa)"
+                   ")");
+        query.exec("UPDATE Metadata SET databaseVersion='1.2' "
+                   "WHERE databaseVersion='1.1'");
+        dbVersion==QStringLiteral("1.2");
+    }
+    if(dbVersion==QStringLiteral("1.2"))
+    {
+        QSqlQuery query(_db);
+        query.exec("ALTER TABLE JugadorParticipaEnMesa "
+                   "ADD COLUMN puntuacionCorregida INTEGER NOT NULL DEFAULT 0");
+        query.exec("UPDATE Metadata SET databaseVersion='1.3' "
+                   "WHERE databaseVersion='1.2'");
+        dbVersion=QStringLiteral("1.2");
     }
     return;
 }
@@ -367,17 +415,18 @@ void RefereeDatabase::checkParticipante(int idParticipante,bool check)
 
 int RefereeDatabase::estimacionMesas() const
 {
+    int res=0;
     int nJugadores=_participantes->numeroParticipantes();
     if(nJugadores<8)
-        return 0;
+        return res;
     if(!(nJugadores%4))
-        return nJugadores/(int)4;
+        res= nJugadores/(int)4;
     else if(!((nJugadores-3)%4))
-        return ((nJugadores-3)%4)+1;
+        res= ((nJugadores-3)/4)+1;
     else if(!((nJugadores-6)%4))
-        return ((nJugadores-6)%4)+2;
-    else return ((nJugadores-9)%4)+3;
-    return 0;
+        res= ((nJugadores-6)/4)+2;
+    else res= ((nJugadores-9)/4)+3;
+    return res;
 }
 
 int RefereeDatabase::numeroMesas() const
@@ -388,10 +437,10 @@ int RefereeDatabase::numeroMesas() const
     if(!(nJugadores%4))
         return nJugadores/(int)4;
     else if(!((nJugadores-3)%4))
-        return ((nJugadores-3)%4)+1;
+        return ((nJugadores-3)/4)+1;
     else if(!((nJugadores-6)%4))
-        return ((nJugadores-6)%4)+2;
-    else return ((nJugadores-9)%4)+3;
+        return ((nJugadores-6)/4)+2;
+    else return ((nJugadores-9)/4)+3;
     return 0;
 }
 
@@ -432,3 +481,190 @@ void RefereeDatabase::addParticipante(QString nombre)
     _participantes->addParticipante(nuevoParticipante);
 }
 
+void RefereeDatabase::generateRepartoRondaInicial()
+{
+    if(!_currentTorneoData || !_participantes)
+        return;
+
+    if(_participantes->participantesCheck() < _currentTorneoData->minimoJugadores())
+        return;
+
+    int numJugadores=_participantes->participantesCheck();
+    int mesasCuatro=0,mesasTres=0;
+
+    //Seguro se puede refactorizar el codigo siguiente
+    if(!(numJugadores%4))
+        mesasCuatro=numJugadores/4;
+    else {
+        numJugadores-=3;
+        mesasTres++;
+        if(!(numJugadores%4))
+            mesasCuatro=numJugadores/4;
+        else {
+            numJugadores-=3;
+            mesasTres++;
+            if(!(numJugadores%4))
+                mesasCuatro=numJugadores/4;
+            else {
+                numJugadores-=3;
+                mesasTres++;
+                mesasCuatro=numJugadores/4;
+            }
+        }
+    }
+
+    QList<ParticipanteData*> listado=_participantes->getListaParticipantes();
+
+    QList<ParticipanteData*> listadoCheck;
+
+    for(int i=0;i<listado.count();i++) {
+        if(listado.at(i)->getChecking())
+            listadoCheck.append(listado[i]);
+    }
+
+    QVector<int> nPart=repartoMesa(listadoCheck.count());
+
+    //Realizar el reparto dentro de la base de datos
+
+    int idRonda=addRondaToTorneo(_currentTorneo,QStringLiteral("Primera ronda"));
+    for(int i=0;i<mesasCuatro;i++){
+        int idMesa=addMesaToRonda(idRonda,QStringLiteral("Mesa ")+QString::number(i));
+        for(int j=0+(4*i);j<4+(i*4);j++) {
+            addParticipanteToMesa(idMesa,listadoCheck.at(nPart.at(j)));
+        }
+    }
+
+    for(int i=0;i<mesasTres;i++) {
+        int idMesa=addMesaToRonda(idRonda,QStringLiteral("Mesa ")+QString::number(i+mesasCuatro));
+        for(int j=(mesasCuatro*4)+(3*i);j<((mesasCuatro*4)+3)+(3*i);j++) {
+            addParticipanteToMesa(idMesa,listadoCheck.at(nPart.at(j)));
+        }
+    }
+}
+
+int RefereeDatabase::addRondaToTorneo(int torneo, QString ronda)
+{
+    int res=-1;
+    if(!_db.isOpen())
+        return res;
+
+    QSqlQuery query(_db);
+    _db.transaction();
+    query.prepare("INSERT INTO Ronda(idTorneo,nombreRonda) "
+                  "VALUES(:torneo,:nombre)");
+    query.bindValue(":torneo",torneo);
+    query.bindValue(":nombre",ronda);
+    if(query.exec()) {
+        query.exec("SELECT last_insert_rowid()");
+        query.next();
+        res=query.value(0).toInt();
+        _db.commit();
+    }
+    else _db.rollback();
+
+    return res;
+}
+
+void RefereeDatabase::clearRondaTorneo(int torneo, QString ronda)
+{
+    if(!_db.isOpen())
+        return;
+
+    QSqlQuery query(_db);
+    _db.transaction();
+    query.prepare("delete from JugadorParticipaEnMesa where idMesa in ( "
+                  "select idMesa from Mesa, ronda where mesa.idRonda=Ronda.idRonda and Ronda.nombreRonda=:ronda and idTorneo=:torneo)");
+    query.bindValue(":torneo",torneo);
+    query.bindValue(":ronda",ronda);
+    if(!query.exec()) {
+        _db.rollback();
+        return;
+    }
+    query.prepare("delete from Mesa where idMesa in ("
+                  "select idMesa from Mesa,Ronda where mesa.idRonda=Ronda.idRonda and Ronda.nombreRonda=:ronda "
+                  "and Ronda.idTorneo=:torneo)");
+    query.bindValue(":torneo",torneo);
+    query.bindValue(":ronda",ronda);
+    if(!query.exec()) {
+        _db.rollback();
+        return;
+    }
+    query.prepare("delete from ronda where idRonda in ("
+                  "select idRonda from Ronda where Ronda.nombreRonda=:ronda "
+                  "and ronda.idTorneo=:torneo");
+    query.bindValue(":torneo",torneo);
+    query.bindValue(":ronda",ronda);
+    if(!query.exec()) {
+        _db.rollback();
+        return;
+    }
+    _db.commit();
+    return;
+}
+
+int RefereeDatabase::addMesaToRonda(int ronda, QString mesa)
+{
+    int res=-1;
+    if(!_db.isOpen())
+        return res;
+
+    QSqlQuery query(_db);
+    _db.transaction();
+    query.prepare("INSERT INTO Mesa(idRonda,nombreMesa) "
+                  "VALUES(:ronda,:mesa)");
+    query.bindValue(":ronda",ronda);
+    query.bindValue(":mesa",mesa);
+    if(query.exec()) {
+        query.exec("SELECT last_insert_rowid()");
+        query.next();
+        res=query.value(0).toInt();
+        _db.commit();
+    }
+    else _db.rollback();
+    return res;
+}
+
+void RefereeDatabase::addParticipanteToMesa(int mesa, const ParticipanteData *participante)
+{
+    if(!_db.isOpen())
+        return;
+
+    QSqlQuery query(_db);
+    _db.transaction();
+    query.prepare("INSERT INTO JugadorParticipaEnMesa(idMesa,idJugador) "
+                  "VALUES(:mesa,:id)");
+    query.bindValue(":mesa",mesa);
+    query.bindValue(":id",participante->getIDParticipante());
+    if(!query.exec())
+        _db.rollback();
+    else _db.commit();
+
+    return;
+}
+
+QVector<int> RefereeDatabase::repartoMesa(int numReparto)
+{
+    std::chrono::high_resolution_clock::duration d=begining-std::chrono::high_resolution_clock::now();
+    unsigned seed=d.count();
+    generadorRand.seed(seed);
+    std::uniform_int_distribution<int> distribucion(0,numReparto-1);
+    QVector<int> nPart;
+    int currentIndex=0;
+    for(int j=0;j<numReparto;j++) {
+        int nAsignado=distribucion(generadorRand);
+        bool repeat=true;
+        while(repeat) {
+            bool partialCheck=false;
+            for(int k=0;k<currentIndex && !partialCheck;k++) {
+                if(nAsignado==nPart[k]
+                        and !partialCheck)
+                    partialCheck=true;
+            }
+            if(partialCheck) nAsignado=distribucion(generadorRand);
+            else repeat=false;
+        }
+        nPart.append(nAsignado);
+        currentIndex++;
+    }
+    return nPart;
+}

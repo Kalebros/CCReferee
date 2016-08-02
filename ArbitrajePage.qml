@@ -60,6 +60,7 @@ ArbitrajePageForm {
                 tipo: torneo.tipo
                 onClicked: {
                     console.log("CLICKED!")
+                    Database.generateRepartoRondaInicial();
                 }
                 checked: true
                 ButtonGroup.group: bGroup

@@ -122,6 +122,11 @@ void ParticipantesModel::setListaParticipantes(QList<ParticipanteData*> lista)
     endResetModel();
 }
 
+QList<ParticipanteData*> ParticipantesModel::getListaParticipantes()
+{
+    return _listaParticipantes;
+}
+
 void ParticipantesModel::addParticipante(ParticipanteData *data)
 {
     beginInsertRows(index(0,0),_listaParticipantes.count(),_listaParticipantes.count());

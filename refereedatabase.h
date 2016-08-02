@@ -7,6 +7,10 @@
 #include <QSqlError>
 #include <QFileInfo>
 
+#include <chrono>
+#include <random>
+#include <algorithm>
+
 #include "torneodata.h"
 #include "torneomodel.h"
 #include "participantedata.h"
@@ -41,6 +45,7 @@ public:
     Q_INVOKABLE void setCurrentTorneo(int idTorneo);
     Q_INVOKABLE void checkParticipante(int idParticipante,bool check);
     Q_INVOKABLE void addParticipante(QString nombre);
+    Q_INVOKABLE void generateRepartoRondaInicial();
 
     void updateParticipante(int idParticipante,ParticipanteData *data);
 
@@ -70,9 +75,18 @@ private:
     TorneoData *_currentTorneoData;
     TorneoModel *_torneos;
     ParticipantesModel *_participantes;
+    std::default_random_engine generadorRand;
+    std::chrono::high_resolution_clock::time_point begining;
 
     void updateToNextVersion();
     QString checkDatabaseVersion() const;
+
+    QVector<int> repartoMesa(int numReparto);
+    int addRondaToTorneo(int torneo,QString ronda);
+    int addMesaToRonda(int ronda,QString mesa);
+    void addParticipanteToMesa(int mesa,const ParticipanteData *participante);
+    void clearRondaTorneo(int torneo, QString ronda);
+
 
 private slots:
 

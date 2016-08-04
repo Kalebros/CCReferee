@@ -24,7 +24,7 @@
 #include "refereedatabase.h"
 #include <QDebug>
 
-QString RefereeDatabase::currentVersion="1.3";
+QString RefereeDatabase::currentVersion="1.4";
 
 RefereeDatabase *RefereeDatabase::_instance=0;
 
@@ -109,7 +109,47 @@ RefereeDatabase::RefereeDatabase(QObject *parent) : QObject(parent)
                    "PRIMARY KEY (idJugador,idMesa)"
                    ")");
 
-        query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.3')");
+        query.exec("CREATE VIEW IF NOT EXISTS VistaPrimeraRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Primera ronda' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaSegundaRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Segunda ronda' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaTerceraRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Tercera ronda' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaSemifinalRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Semifinal' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaFinalRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Final' order by mesa");
+
+        query.exec("INSERT INTO Metadata(databaseVersion) VALUES('1.4')");
     }
     if(checkDatabaseVersion()!=RefereeDatabase::currentVersion)
         updateToNextVersion();
@@ -192,7 +232,53 @@ void RefereeDatabase::updateToNextVersion()
                    "ADD COLUMN puntuacionCorregida INTEGER NOT NULL DEFAULT 0");
         query.exec("UPDATE Metadata SET databaseVersion='1.3' "
                    "WHERE databaseVersion='1.2'");
-        dbVersion=QStringLiteral("1.2");
+        dbVersion=QStringLiteral("1.3");
+    }
+    if(dbVersion==QStringLiteral("1.3")) {
+        QSqlQuery query(_db);
+        query.exec("CREATE VIEW IF NOT EXISTS VistaPrimeraRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Primera ronda' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaSegundaRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Segunda ronda' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaTerceraRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Tercera ronda' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaSemifinalRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Semifinal' order by mesa");
+
+        query.exec("CREATE VIEW IF NOT EXISTS VistaFinalRonda as "
+                   "SELECT r.idTorneo as idTorneo,m.nombreMesa as mesa,p.idParticipante as idParticipante, "
+                   "p.nombre as nombre,jpm.puntuacionReal as puntuacionReal, jpm.puntuacionGeneral as puntuacionGeneral, "
+                   "jpm.puntuacionCorregida as puntuacionCorregida "
+                   "from Participante as p, jugadorparticipaenmesa as jpm,Mesa as m,Ronda as r "
+                   "WHERE p.idParticipante=jpm.idJugador and m.idMesa=jpm.idMesa and m.idRonda=r.idRonda "
+                   "and r.nombreRonda='Final' order by mesa");
+
+        query.exec("UPDATE Metadata SET databaseVersion='1.4' "
+                   "WHERE databaseVersion='1.3'");
+        dbVersion=QStringLiteral("1.4");
     }
     return;
 }
